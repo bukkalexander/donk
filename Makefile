@@ -20,6 +20,10 @@ $(DEPS_STAMP): $(REQ_MAIN) $(REQ_DEV)
 	fi
 	@echo "⟩ installing dev requirements"
 	$(PIP) install -r $(REQ_DEV)
+	@if command -v git >/dev/null 2>&1 && [ -d .git ]; then \
+		echo "⟩ installing pre-push hook"; \
+		$(VENV)/bin/pre-commit install --hook-type pre-push --install-hooks --overwrite; \
+	fi
 	@touch $@
 
 install: $(DEPS_STAMP)

@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: make-ready
+        name: make ready
+        entry: make ready
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
