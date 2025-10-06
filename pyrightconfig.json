@@ -1,0 +1,10 @@
+{
+    "include": ["donk", "test"],
+    "pythonVersion": "3.12",
+    "pythonPlatform": "Linux",
+    "typeCheckingMode": "standard",
+    "reportMissingImports": "error",
+    "venvPath": ".",
+    "venv": ".venv"
+  }
+  

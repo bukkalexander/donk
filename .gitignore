@@ -1,3 +1,5 @@
 .venv/
 .pytest*/
 __pycache__/
+.ruff*/
+.coverage

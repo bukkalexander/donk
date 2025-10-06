@@ -1,0 +1,47 @@
+[tool.pytest.ini_options]
+addopts = [
+  "-ra",
+  "--strict-config",
+  "--strict-markers",
+  "--cov=donk",
+  "--cov-report=term-missing",
+]
+minversion = "8.0"
+pythonpath = ["."]
+testpaths = ["test"]
+
+[tool.coverage.run]
+branch = true
+source = ["donk"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "raise NotImplementedError",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["donk", "test"]
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle
+  "F",  # pyflakes
+  "B",  # bugbear
+  "I",  # import sorting
+  "UP", # pyupgrade
+  "RUF" # Ruff-specific rules
+]
+preview = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["donk"]

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import difflib
+import shutil
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-import shutil
-from typing import Callable, Dict, Iterable, List, Tuple
 
 import pytest
 
 from .context import (
-    DATA_DIR_PATH,
     SIMPLE_DATASET_PATH,
     WORKSPACE_ROOT_PATH,
 )
@@ -61,15 +60,12 @@ def project_factory(project_workspace: Path) -> Callable[[Path], ProjectLayout]:
             expected_root=expected_root,
             actual_root=actual_root,
         )
+
     return _build
 
 
-def _walk_files(root: Path) -> Dict[Path, Path]:
-    return {
-        path.relative_to(root): path
-        for path in sorted(root.rglob("*"))
-        if path.is_file()
-    }
+def _walk_files(root: Path) -> dict[Path, Path]:
+    return {path.relative_to(root): path for path in sorted(root.rglob("*")) if path.is_file()}
 
 
 def _diff_text(expected: Path, actual: Path) -> str | None:
@@ -92,8 +88,8 @@ def _diff_text(expected: Path, actual: Path) -> str | None:
     return "\n".join(diff_lines)
 
 
-def compare_trees(expected_root: Path, actual_root: Path) -> List[str]:
-    differences: List[str] = []
+def compare_trees(expected_root: Path, actual_root: Path) -> list[str]:
+    differences: list[str] = []
     expected_files = _walk_files(expected_root)
     actual_files = _walk_files(actual_root)
 
