@@ -7,7 +7,7 @@ DEPS_STAMP := $(VENV)/.deps-stamp
 
 .DEFAULT_GOAL := ready
 
-.PHONY: install venv pip-upgrade format format-check lint lint-fix typecheck test security fix check ready clean
+.PHONY: install venv pip-upgrade format format-check lint lint-fix typecheck test security fix check ready clean git-cloc
 
 $(DEPS_STAMP): $(REQ_MAIN) $(REQ_DEV)
 	@echo "⟩ creating virtualenv"
@@ -70,3 +70,6 @@ ready:
 
 clean:
 	rm -rf $(VENV)
+
+git-cloc:
+	cloc --list-file <(git ls-files)
