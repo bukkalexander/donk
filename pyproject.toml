@@ -41,6 +41,7 @@ select = [
   "UP", # pyupgrade
   "RUF" # Ruff-specific rules
 ]
+ignore = ["E741"] # ambiguous variable name
 preview = true
 
 [tool.ruff.lint.isort]
