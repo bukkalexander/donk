@@ -7,13 +7,18 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "${workspaceFolder}/test"
+                "${workspaceFolder}/test/lang_int/test_lang_int.py::test_main"
             ],
-            // "console": "integratedTerminal",
+            "console": "integratedTerminal",
             "justMyCode": false,
-            // "env": {
-            //     "PYTHONPATH": "${workspaceFolder}"
-            // }
+        },
+        {
+            "name": "Python",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/donk/lang_int/ast_nodes.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
         }
     ]
 }
