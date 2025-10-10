@@ -7,7 +7,8 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "${workspaceFolder}/test/lang_int/test_lang_int.py::test_main"
+                "-s",
+                "${workspaceFolder}/test/lang_int/test_lang_int.py::test_ex_1_1"
             ],
             "console": "integratedTerminal",
             "justMyCode": false,

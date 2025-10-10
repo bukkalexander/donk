@@ -5,6 +5,7 @@ addopts = [
   "--strict-markers",
   "--cov=donk",
   "--cov-report=term-missing",
+  "--cov-report=html",
 ]
 minversion = "8.0"
 pythonpath = ["."]
@@ -34,15 +35,18 @@ quote-style = "double"
 
 [tool.ruff.lint]
 select = [
-  "E",  # pycodestyle
-  "F",  # pyflakes
-  "B",  # bugbear
-  "I",  # import sorting
-  "UP", # pyupgrade
-  "RUF" # Ruff-specific rules
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "B",   # bugbear
+  "I",   # import sorting
+  "UP",  # pyupgrade
+  "RUF", # Ruff-specific rules
 ]
 ignore = ["E741"] # ambiguous variable name
 preview = true
 
 [tool.ruff.lint.isort]
 known-first-party = ["donk"]
+
+[tool.ruff.lint.per-file-ignores]
+"test/**/*.py" = ["F403", "F405"]

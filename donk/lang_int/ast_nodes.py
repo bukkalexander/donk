@@ -2,10 +2,11 @@
 
 import ast
 
-
 # =============================================================================
 #   AST Nodes
 # =============================================================================
+
+
 class AstNode:
     def __repr__(self):
         params = ", ".join(f"{value!r}" for _, value in vars(self).items())
@@ -66,6 +67,8 @@ class Module(AstNode):
 # =============================================================================
 #   Matcher
 # =============================================================================
+
+
 def is_exp(e):
     match e:
         case Constant(value=n):
@@ -76,7 +79,7 @@ def is_exp(e):
             return is_exp(e1)
         case BinOp(left=e1, op=Add(), right=e2):
             return is_exp(e1) and is_exp(e2)
-        case BinOp(left=e1, op=USub(), right=e2):
+        case BinOp(left=e1, op=Sub(), right=e2):
             return is_exp(e1) and is_exp(e2)
         case _:
             return False
@@ -101,12 +104,8 @@ def is_lang_int(p):
 
 
 # =============================================================================
-#   Interpreter
+#   Auxiliary Functions
 # =============================================================================
-
-################################################################################
-# Auxiliary Functions
-################################################################################
 
 # signed 64-bit arithmetic
 
@@ -148,6 +147,11 @@ def input_int() -> int:
     return x
 
 
+# =============================================================================
+#   Interpreter
+# =============================================================================
+
+
 def interp_exp(e):
     match e:
         case BinOp(left=left, op=Add(), right=right):
@@ -181,6 +185,67 @@ def interp_lang_int(p):
                 interp_stmt(s)
 
 
+# =============================================================================
+#   Partial evaluator
+# =============================================================================
+
+
+def pe_neg(r):
+    match r:
+        case Constant(value=n):
+            return Constant(neg64(n))
+        case _:
+            return UnaryOp(USub(), r)
+
+
+def pe_add(r1, r2):
+    match (r1, r2):
+        case (Constant(value=n1), Constant(value=n2)):
+            return Constant(add64(n1, n2))
+        case _:
+            return BinOp(r1, Add(), r2)
+
+
+def pe_sub(r1, r2):
+    match (r1, r2):
+        case (Constant(value=n1), Constant(value=n2)):
+            return Constant(sub64(n1, n2))
+        case _:
+            return BinOp(r1, Sub(), r2)
+
+
+def pe_exp(e):
+    match e:
+        case BinOp(left=left, op=Add(), right=right):
+            return pe_add(pe_exp(left), pe_exp(right))
+        case BinOp(left=left, op=Sub(), right=right):
+            return pe_sub(pe_exp(left), pe_exp(right))
+        case UnaryOp(op=USub(), operand=v):
+            return pe_neg(pe_exp(v))
+        case Constant():
+            return e
+        case Call(func=Name(id="input_int"), args=[]):
+            return e
+
+
+def pe_stmt(s):
+    match s:
+        case Expr(value=Call(func=Name(id="print"), args=[arg])):
+            return Expr(Call(Name("print"), [pe_exp(arg)]))
+        case Expr(value=value):
+            return Expr(pe_exp(value))
+
+
+def pe_P_int(p):
+    match p:
+        case Module(body=body):
+            new_body = [pe_stmt(s) for s in body]
+            return Module(new_body)
+
+
+# =============================================================================
+#   Main (for testing)
+# =============================================================================
 def main():
     eight = Constant(8)
     neg_eight = UnaryOp(USub(), eight)
